@@ -33,3 +33,5 @@ docker compose exec backend python manage.py collectstatic --no-input
 Зайти
 http://localhost/admin
 login:admin password:admin
+http://localhost
+login:test@mail.ru password:test
