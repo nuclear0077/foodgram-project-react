@@ -126,7 +126,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action in ['create', 'partial_update']:
             return RecipesSerializerWrite
         return RecipesSerializerRead
 
