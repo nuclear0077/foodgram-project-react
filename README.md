@@ -28,30 +28,30 @@ cp .env.example .env
 
 Выполнить команду
 ```
-docker-compose up -d --build  
+docker compose up -d --build  
 ```
 
 Инициализировать базу данных
 
 ```
-sudo docker-compose exec db createdb -U postgres foodgram
+docker compose exec db createdb -U postgres foodgram
 ```
 
 Применить миграции
 
 ```
-docker compose exec web python manage.py migrate
+docker compose exec backend python manage.py migrate
 ```
 
 Подготовить статику
 
 ```
-docker compose exec web python manage.py collectstatic --no-input 
+docker compose exec backend python manage.py collectstatic --no-input 
 ```
 
 Загрузить данные из JSON
 ```
-docker compose exec web python manage.py loaddata fixtures.json
+docker compose exec backend python manage.py loaddata fixtures.json
 ```
 Зайти
 http://localhost/admin
