@@ -19,10 +19,28 @@ class RicipeFilter(FilterSet):
         queryset=Tag.objects.all())
     is_favorited = BooleanFilter(field_name='favorites__user', method='filter_favorite')
     is_in_shopping_cart = BooleanFilter(field_name='shopping_card__user', method='filter_shopping_card')
+    # is_favorited = BooleanFilter(method='filter_favorite')
+    # is_in_shopping_cart = BooleanFilter(method='filter_shopping_card')
 
     class Meta:
         model = Recipe
         fields = ('author', 'tags', 'is_favorited', 'is_in_shopping_cart')
+# если включить функции и использовать через add_user_annotations, все работает,
+    # кроме фильтрации тегов на странице в избранных
+
+    # def filter_favorite(self, queryset, name, value):
+    #     if self.request.user.is_anonymous:
+    #         return Recipe.objects.none()
+    #     if value:
+    #         return Recipe.objects.add_user_annotations(self.request.user).filter(is_favorited=True)
+    #     return queryset
+    #
+    # def filter_shopping_card(self, queryset, name, value):
+    #     if self.request.user.is_anonymous:
+    #         return Recipe.objects.none()
+    #     if value:
+    #         return Recipe.objects.add_user_annotations(self.request.user).filter(is_in_shopping_cart=True)
+    #     return queryset
 
     def filter_favorite(self, queryset, name, value):
         if self.request.user.is_anonymous:
