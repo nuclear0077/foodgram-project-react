@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from recipes.models import Recipe, Tag, RecipeIngredient, Ingredient, Follow, ShoppingCard, FavoriteRecipe
+from recipes.models import Recipe, Tag, RecipeIngredient, Ingredient, Follow, ShoppingCard, Favorite
 
 User = get_user_model()
 
@@ -94,7 +94,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit')
 
 
-class SubscriptionRecipSerializerRead(serializers.ModelSerializer):
+class SubscriptionRecipeSerializerRead(serializers.ModelSerializer):
     image = Base64ImageField()
 
     class Meta:
@@ -131,7 +131,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     def get_recipes(self, attrs):
         author = attrs.author
         all_recipes = Recipe.objects.filter(author=author)
-        return SubscriptionRecipSerializerRead(all_recipes, many=True).data
+        return SubscriptionRecipeSerializerRead(all_recipes, many=True).data
 
     def get_recipes_count(self, attrs):
         author = attrs.author
@@ -149,7 +149,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
-class RecipesSerializerRead(serializers.ModelSerializer):
+class RecipeSerializerRead(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     author = UserReadSerializer(many=False, read_only=True)
     ingredients = RecipeIngredientSerializer(many=True, read_only=True, source='recipe_ingredients')
@@ -165,13 +165,13 @@ class RecipesSerializerRead(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return user.favorite.filter(recip=recipe).exists()
+        return user.favorites.filter(recipe=recipe).exists()
 
     def get_is_in_shopping_cart(self, recipe):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return user.shopping_card.filter(recip=recipe).exists()
+        return user.shopping_card.filter(recipe=recipe).exists()
 
 
 class RecipeIngredientInWriteSerializer(serializers.ModelSerializer):
@@ -183,7 +183,7 @@ class RecipeIngredientInWriteSerializer(serializers.ModelSerializer):
         fields = ('id', 'amount')
 
 
-class RecipesSerializerWrite(serializers.ModelSerializer):
+class RecipeWriteSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all())
     ingredients = RecipeIngredientInWriteSerializer(many=True)
     image = Base64ImageField()
@@ -212,14 +212,14 @@ class RecipesSerializerWrite(serializers.ModelSerializer):
     def create(self, validated_data):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
-        recip = Recipe.objects.create(**validated_data)
-        recip.tags.add(*tags)
+        recipe = Recipe.objects.create(**validated_data)
+        recipe.tags.add(*tags)
         for ingredient in ingredients:
             RecipeIngredient.objects.create(
                 ingredient=ingredient.get('id'),
-                recipe=recip,
+                recipe=recipe,
                 amount=ingredient.get('amount'))
-        return recip
+        return recipe
 
     def update(self, instance, validated_data):
         tags = validated_data.pop('tags')
@@ -240,32 +240,32 @@ class RecipesSerializerWrite(serializers.ModelSerializer):
     def to_representation(self, instance):
         request = self.context.get('request')
         context = {'request': request}
-        return RecipesSerializerRead(instance, context=context).data
+        return RecipeSerializerRead(instance, context=context).data
 
 
-class FavoritesSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='recip.id')
-    name = serializers.ReadOnlyField(source='recip.name')
-    image = serializers.ImageField(source='recip.image', read_only=True)
-    cooking_time = serializers.ReadOnlyField(source='recip.cooking_time')
+class FavoriteSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='recipe.id')
+    name = serializers.ReadOnlyField(source='recipe.name')
+    image = serializers.ImageField(source='recipe.image', read_only=True)
+    cooking_time = serializers.ReadOnlyField(source='recipe.cooking_time')
 
     class Meta:
-        model = FavoriteRecipe
+        model = Favorite
         fields = ('id', 'name', 'cooking_time', 'image')
 
     def validate(self, attrs):
         user = self.context.get('request').user
-        recip = self.context.get('recip')
-        if FavoriteRecipe.objects.filter(user=user, recip=recip).exists():
+        recipe = self.context.get('recipe')
+        if Favorite.objects.filter(user=user, recipe=recipe).exists():
             raise serializers.ValidationError({'error': 'рецепт уже в избранном'}, code=400)
         return attrs
 
 
 class ShoppingCardSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='recip.id')
-    name = serializers.ReadOnlyField(source='recip.name')
-    image = serializers.ImageField(source='recip.image', read_only=True)
-    cooking_time = serializers.ReadOnlyField(source='recip.cooking_time')
+    id = serializers.ReadOnlyField(source='recipe.id')
+    name = serializers.ReadOnlyField(source='recipe.name')
+    image = serializers.ImageField(source='recipe.image', read_only=True)
+    cooking_time = serializers.ReadOnlyField(source='recipe.cooking_time')
 
     class Meta:
         model = ShoppingCard
@@ -273,7 +273,7 @@ class ShoppingCardSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         user = self.context.get('request').user
-        recip = self.context.get('recip')
-        if ShoppingCard.objects.filter(user=user, recip=recip).exists():
+        recipe = self.context.get('recipe')
+        if ShoppingCard.objects.filter(user=user, recipe=recipe).exists():
             raise serializers.ValidationError({'error': 'рецепт уже в списке покупок'}, code=400)
         return attrs

@@ -7,8 +7,8 @@ from .views import (
     logout,
     TagListRetrieveViewSet,
     IngredientListRetrieveViewSet,
-    SubscriptionsListViewSet,
-    RecipesViewSet,
+    SubscriptionListViewSet,
+    RecipeViewSet,
     FavoriteViewSet,
     ShoppingCardListViewSet
 )
@@ -17,7 +17,7 @@ router_v1 = routers.DefaultRouter()
 router_v1.register('users', UserViewSet, basename='users')
 router_v1.register('tags', TagListRetrieveViewSet, basename='tags')
 router_v1.register('ingredients', IngredientListRetrieveViewSet, basename='ingredients')
-router_v1.register('recipes', RecipesViewSet, basename='recipes')
+router_v1.register('recipes', RecipeViewSet, basename='recipes')
 
 auth_urls = [
     path(
@@ -28,8 +28,8 @@ auth_urls = [
 
 urlpatterns = [
     path('auth/', include(auth_urls)),
-    path('users/subscriptions/', SubscriptionsListViewSet.as_view({'get': 'list'}), name='subscriptions'),
-    path(r'users/<int:id>/subscribe/', SubscriptionsListViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
+    path('users/subscriptions/', SubscriptionListViewSet.as_view({'get': 'list'}), name='subscriptions'),
+    path(r'users/<int:id>/subscribe/', SubscriptionListViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
          name='subscriptions'),
     path(r'recipes/<int:id>/favorite/', FavoriteViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
          name='favorites'),

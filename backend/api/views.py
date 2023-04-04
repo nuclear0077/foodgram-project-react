@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.utils import ListRetrieveModelMixin, ListCreateDestroyModelMixin, RetrieveDestroyModelMixin
-from recipes.models import Recipe, Tag, Ingredient, Follow, ShoppingCard, FavoriteRecipe, RecipeIngredient
+from recipes.models import Recipe, Tag, Ingredient, Follow, ShoppingCard, Favorite, RecipeIngredient
 from users.models import User
 from .filters import RicipeFilter, IngredientFilter
 from .permissions import IsAuthorOrReadOnly
@@ -21,10 +21,10 @@ from .serializers import (
     TagSerializer,
     IngredientSerializer,
     SubscriptionSerializer,
-    RecipesSerializerRead,
-    FavoritesSerializer,
+    RecipeSerializerRead,
+    FavoriteSerializer,
     ShoppingCardSerializer,
-    RecipesSerializerWrite, UserReadSerializer, UserWriteSerializer
+    RecipeWriteSerializer, UserReadSerializer, UserWriteSerializer
 )
 
 
@@ -91,7 +91,7 @@ class IngredientListRetrieveViewSet(ListRetrieveModelMixin):
     filter_backends = (DjangoFilterBackend,)
 
 
-class SubscriptionsListViewSet(ListCreateDestroyModelMixin):
+class SubscriptionListViewSet(ListCreateDestroyModelMixin):
     serializer_class = SubscriptionSerializer
     permission_classes = [IsAuthenticated, ]
 
@@ -118,17 +118,18 @@ class SubscriptionsListViewSet(ListCreateDestroyModelMixin):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RecipesViewSet(viewsets.ModelViewSet):
+class RecipeViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = Recipe.objects.all()
     permission_classes = [IsAuthorOrReadOnly]
     filterset_class = RicipeFilter
     filter_backends = (DjangoFilterBackend,)
 
+# мб не action использовать а метод ? либо безопасный метод или нет
     def get_serializer_class(self):
         if self.action in ['create', 'partial_update']:
-            return RecipesSerializerWrite
-        return RecipesSerializerRead
+            return RecipeWriteSerializer
+        return RecipeSerializerRead
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -156,26 +157,26 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
 
 class FavoriteViewSet(RetrieveDestroyModelMixin):
-    queryset = FavoriteRecipe.objects.all()
-    serializer_class = FavoritesSerializer
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
     permission_classes = [IsAuthenticated, ]
 
     def create(self, request, id):
-        recip = get_object_or_404(Recipe, pk=id)
-        context = {'request': request, 'recip': recip}
+        recipe = get_object_or_404(Recipe, pk=id)
+        context = {'request': request, 'recipe': recipe}
         serializer = self.get_serializer(data=request.data, context=context)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user, recip=recip)
+            serializer.save(user=request.user, recipe=recipe)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, id):
-        recip = get_object_or_404(Recipe, pk=id)
+        recipe = get_object_or_404(Recipe, pk=id)
         user = request.user
-        if not FavoriteRecipe.objects.filter(user=user, recip=recip).exists():
+        if not Favorite.objects.filter(user=user, recipe=recipe).exists():
             return Response({'error': 'У вас не было этого рецепта в избранном'},
                             status=status.HTTP_400_BAD_REQUEST)
-        favorite_recip = get_object_or_404(FavoriteRecipe, user=user, recip=recip)
-        favorite_recip.delete()
+        favorite_recipe = get_object_or_404(Favorite, user=user, recipe=recipe)
+        favorite_recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -185,19 +186,19 @@ class ShoppingCardListViewSet(ListCreateDestroyModelMixin):
     permission_classes = [IsAuthenticated, ]
 
     def create(self, request, id):
-        recip = get_object_or_404(Recipe, pk=id)
-        context = {'request': request, 'recip': recip}
+        recipe = get_object_or_404(Recipe, pk=id)
+        context = {'request': request, 'recipe': recipe}
         serializer = self.get_serializer(data=request.data, context=context)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user, recip=recip)
+            serializer.save(user=request.user, recipe=recipe)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, id):
-        recip = get_object_or_404(Recipe, pk=id)
+        recipe = get_object_or_404(Recipe, pk=id)
         user = request.user
-        if not ShoppingCard.objects.filter(user=user, recip=recip).exists():
+        if not ShoppingCard.objects.filter(user=user, recipe=recipe).exists():
             return Response({'error': 'У вас не было этого рецепта в списке покупок'},
                             status=status.HTTP_400_BAD_REQUEST)
-        shopping_card = get_object_or_404(ShoppingCard, user=user, recip=recip)
+        shopping_card = get_object_or_404(ShoppingCard, user=user, recipe=recipe)
         shopping_card.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
