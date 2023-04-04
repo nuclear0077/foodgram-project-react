@@ -1,4 +1,4 @@
-## FOODGRAM
+# FOODGRAM
 
 ## About
 
@@ -58,7 +58,3 @@ http://localhost/admin
 login:admin password:admin
 http://localhost
 login:test@mail.ru password:test
-
-
-
-
