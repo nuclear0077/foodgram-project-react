@@ -112,17 +112,6 @@ class RecipeQuerySet(models.QuerySet):
         )
 
 
-# class RecipeManager(models.Manager):
-#     def get_queryset(self):
-#         return RecipeQuerySet(self.model, using=self._db)
-#
-#     def filter_by_tags(self):
-#         return self.get_queryset().filter_by_tags()
-#
-#     def add_user_annotations(self):
-#         return self.get_queryset().add_user_annotations()
-
-
 class Recipe(models.Model):
     name = models.CharField(
         max_length=200,
@@ -149,6 +138,7 @@ class Recipe(models.Model):
         db_index=True
     )
 
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         ordering = ('-pub_date',)
