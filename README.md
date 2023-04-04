@@ -17,42 +17,29 @@ git clone https://github.com/nuclear0077/foodgram-project-react.git
 ```
 
 ```
-cd foodgram-project-react/infra/
+cd foodgram-project-react/
 ```
 
-Указать настройки для подключения к СУБД Postgres в файле .env для этого необходимо переименовать .env.example файл на .env
-Создадим файл
+Запустить проект используя команду
 ```
-cp .env.example .env
-```
-
-Выполнить команду
-```
-docker compose up -d --build  
+make start
 ```
 
-Инициализировать базу данных
-
+Загрузить дамп базы
 ```
-docker compose exec db createdb -U postgres foodgram
-```
-
-Применить миграции
-
-```
-docker compose exec backend python manage.py migrate
+make load_dump
 ```
 
-Подготовить статику
+Остановить проект
+```
+make stop
+```
 
+Удалить докер контейнеры
 ```
-docker compose exec backend python manage.py collectstatic --no-input 
+make drop
 ```
 
-Загрузить данные из JSON
-```
-docker compose exec backend python manage.py loaddata fixtures.json
-```
 Зайти
 http://localhost/admin
 login:admin password:admin
