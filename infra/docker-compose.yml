@@ -1,11 +1,12 @@
 version: '3.3'
+
 volumes:
   static:
   media:
   db:
+
 services:
   db:
-    container_name: db
     image: postgres:13.0-alpine
     volumes:
       - db:/var/lib/postgresql/data/

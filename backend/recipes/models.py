@@ -61,9 +61,6 @@ class Follow(models.Model):
             )
         ]
 
-    def __str__(self):
-        return f'Подписчик {self.user} на {self.author}'
-
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -175,9 +172,6 @@ class Favorite(models.Model):
             )
         ]
 
-    def __str__(self):
-        return f'Пользователь:{self.user} избарнный рецепт{self.recipe}'
-
 
 class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
@@ -206,9 +200,6 @@ class RecipeIngredient(models.Model):
             )
         ]
 
-    def __str__(self):
-        return f'{self.ingredient} {self.recipe}'
-
 
 class TagRecipe(models.Model):
     tag = models.ForeignKey(
@@ -233,9 +224,6 @@ class TagRecipe(models.Model):
             )
         ]
 
-    def __str__(self):
-        return f'{self.tag} {self.recipe}'
-
 
 class ShoppingCard(models.Model):
     user = models.ForeignKey(
@@ -258,6 +246,3 @@ class ShoppingCard(models.Model):
                 fields=['user', 'recipe'], name='unique_user_recipe'
             )
         ]
-
-    def __str__(self):
-        return f'Пользователь:{self.user} {self.recipe}'

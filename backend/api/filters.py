@@ -1,5 +1,4 @@
 from django_filters.rest_framework import FilterSet, CharFilter, BooleanFilter, filters
-from django_filters import Filter
 from recipes.models import Recipe, Tag, Ingredient
 
 
@@ -11,29 +10,19 @@ class IngredientFilter(FilterSet):
         fields = ('name',)
 
 
-class TagsFilter(Filter):
-    def filter(self, qs, value):
-        clean_data = value.split('?tags=')
-        return Recipe.objects.filter_by_tags(clean_data)
-
-
 #  нагуглил про Reverse ForeignKey и вроде работает, но как то сложно, 100% есть проще вариант
 class RicipeFilter(FilterSet):
     author = CharFilter(field_name='author')
-    tags = TagsFilter()
-    # tags = filters.ModelMultipleChoiceFilter(
-    #     field_name='tags__slug',
-    #     to_field_name='slug',
-    #     queryset=Tag.objects.all())
+    tags = filters.ModelMultipleChoiceFilter(
+        field_name='tags__slug',
+        to_field_name='slug',
+        queryset=Tag.objects.all())
     is_favorited = BooleanFilter(field_name='favorites__user', method='filter_favorite')
     is_in_shopping_cart = BooleanFilter(field_name='shopping_card__user', method='filter_shopping_card')
 
     class Meta:
         model = Recipe
         fields = ('author', 'tags', 'is_favorited', 'is_in_shopping_cart')
-
-    # def filter_tags(self, queryset, name, value):
-    #     return queryset.filter(tags__in=value)
 
     def filter_favorite(self, queryset, name, value):
         if self.request.user.is_anonymous:
