@@ -10,50 +10,15 @@ class IngredientFilter(FilterSet):
         fields = ('name',)
 
 
-#  нагуглил про Reverse ForeignKey и вроде работает, но как то сложно, 100% есть проще вариант
-class RicipeFilter(FilterSet):
+class RecipeFilter(FilterSet):
     author = CharFilter(field_name='author')
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
         queryset=Tag.objects.all())
-    is_favorited = BooleanFilter(field_name='favorites__user', method='filter_favorite')
-    is_in_shopping_cart = BooleanFilter(field_name='shopping_card__user', method='filter_shopping_card')
-    # is_favorited = BooleanFilter(method='filter_favorite')
-    # is_in_shopping_cart = BooleanFilter(method='filter_shopping_card')
+    is_favorited = BooleanFilter()
+    is_in_shopping_cart = BooleanFilter()
 
     class Meta:
         model = Recipe
         fields = ('author', 'tags', 'is_favorited', 'is_in_shopping_cart')
-# если включить функции и использовать через add_user_annotations, все работает,
-    # кроме фильтрации тегов на странице в избранных
-
-    # def filter_favorite(self, queryset, name, value):
-    #     if self.request.user.is_anonymous:
-    #         return Recipe.objects.none()
-    #     if value:
-    #         return Recipe.objects.add_user_annotations(self.request.user).filter(is_favorited=True)
-    #     return queryset
-    #
-    # def filter_shopping_card(self, queryset, name, value):
-    #     if self.request.user.is_anonymous:
-    #         return Recipe.objects.none()
-    #     if value:
-    #         return Recipe.objects.add_user_annotations(self.request.user).filter(is_in_shopping_cart=True)
-    #     return queryset
-
-    def filter_favorite(self, queryset, name, value):
-        if self.request.user.is_anonymous:
-            return Recipe.objects.none()
-        if value:
-            return queryset.filter(favorites__user=self.request.user)
-        else:
-            return queryset.exclude(favorites__user=self.request.user)
-
-    def filter_shopping_card(self, queryset, name, value):
-        if self.request.user.is_anonymous:
-            return Recipe.objects.none()
-        if value:
-            return queryset.filter(shopping_card__user=self.request.user)
-        else:
-            return queryset.exclude(shopping_card__user=self.request.user)

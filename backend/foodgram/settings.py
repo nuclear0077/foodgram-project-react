@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'drf_spectacular',
+    'djoser',
     # local
     'api',
     'recipes',
@@ -158,13 +159,24 @@ REST_FRAMEWORK = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-STATIC_URL = '/static/'
-# STATICFILES_DIRS необходимо закомментировать или удалить
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 PATH_DATA = Path(BASE_DIR, 'data/')
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'HIDE_USERS': False,
+    'SERIALIZERS': {
+        'user_create': 'api.serializers.CustomUserCreateSerializer',
+        'user': 'api.serializers.CustomUserSerializer',
+        'current_user': 'api.serializers.CustomUserSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ('rest_framework.permissions.AllowAny',),
+        'user_list': ('rest_framework.permissions.AllowAny',)
+    }
+}
+FILENAME_SHOPPING_CART = 'shopping_cart.txt'
