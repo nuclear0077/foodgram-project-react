@@ -14,9 +14,10 @@ services:
       - ./.env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+#    build:
+#      context: ../backend
+#      dockerfile: Dockerfile
+    image: nuclear0077/foodgram_backend:latest
     restart: always
     container_name: backend
     ports:
