@@ -28,7 +28,9 @@ services:
       - db
 
   frontend:
-    image: nuclear0077/foodgram_frontend:latest
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
