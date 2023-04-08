@@ -14,7 +14,9 @@ services:
       - ./.env
 
   backend:
-    image: nuclear0077/foodgram_backend:latest
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     restart: always
     container_name: backend
     ports:
@@ -48,4 +50,3 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
     depends_on:
       - frontend
-      - backend
