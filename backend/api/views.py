@@ -1,11 +1,10 @@
-from django.db.models import Exists, OuterRef, Value, Sum
-
+from django.conf import settings
+from django.db.models import Value
 from django.db.models.fields import BooleanField
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from django.conf import settings
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -33,6 +32,7 @@ class CustomUserViewSet(UserViewSet):
     serializer_class = CustomUserSerializer
     http_method_names = ['get', 'post', 'delete']
 
+    # пока оставлю это тут
     # def get_queryset(self):
     #     if self.request.user.is_authenticated:
     #         return User.objects.annotate(is_subscribed=Exists(

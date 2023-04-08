@@ -3,7 +3,6 @@ from django.contrib import admin
 from recipes.models import Recipe, Tag, TagRecipe, RecipeIngredient, Ingredient, Follow, ShoppingCard, Favorite
 
 
-# еще надо посчитать количество рецептов в избранном, наверное как то можно добавить кастомное поле в админку ?
 class RecipeIngredientLine(admin.TabularInline):
     model = RecipeIngredient
     min_num = 1

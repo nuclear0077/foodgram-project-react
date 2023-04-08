@@ -1,7 +1,8 @@
 import base64
-from rest_framework import mixins, viewsets, serializers
+
 from django.core.files.base import ContentFile
 from django.db.models import Sum
+from rest_framework import mixins, viewsets, serializers
 
 from recipes.models import RecipeIngredient
 

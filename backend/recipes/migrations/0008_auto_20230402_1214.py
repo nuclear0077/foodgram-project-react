@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('recipes', '0007_auto_20230402_0654'),
     ]
@@ -14,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='cooking_time',
-            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1)], verbose_name='Время приготовления, мин'),
+            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1)],
+                                                   verbose_name='Время приготовления, мин'),
         ),
         migrations.AlterField(
             model_name='tag',
