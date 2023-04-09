@@ -83,6 +83,7 @@ class CustomUserViewSet(UserViewSet):
             follow = get_object_or_404(Follow, user=user, author=author)
             follow.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class TagListRetrieveViewSet(ListRetrieveModelMixin):
@@ -129,9 +130,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         product_list = get_product_list(request)
         response = HttpResponse(product_list,
                                 content_type='text/plain')
-        response[
-            'Content-Disposition'] = \
-            f'attachment; filename={settings.FILENAME_SHOPPING_CART}'
+        response['Content-Disposition'] = (
+            f'attachment; filename={settings.FILENAME_SHOPPING_CART}')
         return response
 
     @action(
@@ -162,6 +162,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                                               recipe=recipe)
             shopping_card.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         detail=True,
@@ -188,3 +189,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
                                                 recipe=recipe)
             favorite_recipe.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
