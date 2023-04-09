@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
-from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import OuterRef, Exists
+from django.db.models import Exists, OuterRef
 
 User = get_user_model()
 
@@ -34,7 +33,7 @@ class Tag(models.Model):
         ]
 
     def __str__(self):
-        return f'Тег: {self.name}, HEX-код цвета: {self.color}, Slug: {self.slug}'
+        return f'Тег: {self.name}, HEX-код: {self.color}, Slug: {self.slug}'
 
 
 class Follow(models.Model):
@@ -77,12 +76,14 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
         constraints = [
             models.UniqueConstraint(
-                fields=['name', 'measurement_unit'], name='unique_name_measurement_unit'
+                fields=['name', 'measurement_unit'],
+                name='unique_name_measurement_unit'
             )
         ]
 
     def __str__(self):
-        return f'Ингредиент: {self.name}, Единица измерения: {self.measurement_unit}'
+        return (f'Ингредиент: {self.name}, '
+                f'Единица измерения: {self.measurement_unit}')
 
 
 class RecipeQuerySet(models.QuerySet):
@@ -126,7 +127,8 @@ class Recipe(models.Model):
         verbose_name='Картинка'
     )
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')
+    ingredients = models.ManyToManyField(Ingredient,
+                                         through='RecipeIngredient')
     tags = models.ManyToManyField(Tag, through='TagRecipe')
 
     pub_date = models.DateTimeField(
@@ -148,7 +150,8 @@ class Recipe(models.Model):
         ]
 
     def __str__(self):
-        return f'Рецепт: {self.name}, Описание: {self.text[:100]}, Время приготовления: {self.cooking_time} мин.'
+        return (f'Рецепт: {self.name}, Описание: {self.text[:100]},'
+                f'Время приготовления: {self.cooking_time} мин.')
 
 
 class Favorite(models.Model):
@@ -196,7 +199,8 @@ class RecipeIngredient(models.Model):
         verbose_name_plural = 'Ингредиенты и рецепты'
         constraints = [
             models.UniqueConstraint(
-                fields=['ingredient', 'recipe'], name='unique_ingredient_recipe'
+                fields=['ingredient', 'recipe'],
+                name='unique_ingredient_recipe'
             )
         ]
 

@@ -2,12 +2,13 @@ import base64
 
 from django.core.files.base import ContentFile
 from django.db.models import Sum
-from rest_framework import mixins, viewsets, serializers
+from rest_framework import mixins, serializers, viewsets
 
 from recipes.models import RecipeIngredient
 
 
-class ListRetrieveModelMixin(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class ListRetrieveModelMixin(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                             viewsets.GenericViewSet):
     pass
 
 
@@ -23,7 +24,8 @@ class Base64ImageField(serializers.ImageField):
 def get_product_list(request):
     product_dict = RecipeIngredient.objects.filter(
         recipe__shopping_card__user=request.user).values(
-        'ingredient__name', 'ingredient__measurement_unit').annotate(total_amount=Sum('amount'))
+        'ingredient__name', 'ingredient__measurement_unit').annotate(
+        total_amount=Sum('amount'))
     product_list = []
     for product in product_dict:
         name, unit, amount = product.values()
