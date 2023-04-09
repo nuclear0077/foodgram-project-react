@@ -1,3 +1,4 @@
+from core.utils import ListRetrieveModelMixin, get_product_list
 from django.conf import settings
 from django.db.models import Value
 from django.db.models.fields import BooleanField
@@ -5,14 +6,12 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
+                            Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-from core.utils import ListRetrieveModelMixin, get_product_list
-from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
-                            Tag)
 from users.models import User
 
 from .filters import IngredientFilter, RecipeFilter
