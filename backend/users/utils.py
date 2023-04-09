@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 
+
 # в core вынести не смог, ловлю ошибку из за from recipes.models import RecipeIngredient
 # куда валидацтю лучше спрятать ?
 def username_validator(username):
