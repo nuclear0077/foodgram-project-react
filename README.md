@@ -1,5 +1,5 @@
 # FOODGRAM
-
+![example workflow](https://github.com/nuclear0077/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 ## About
 
 
