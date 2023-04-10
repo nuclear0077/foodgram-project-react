@@ -4,7 +4,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.management import BaseCommand
 
-from recipes.models import Tag
+from foodgram.recipes.models import Tag
 
 
 class Command(BaseCommand):

@@ -10,28 +10,24 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.utils import ListRetrieveModelMixin, get_product_list
-from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
-                            Tag)
-from users.models import User
-from .filters import IngredientFilter, RecipeFilter
-from .permissions import IsAuthorOrReadOnly
-from .serializers import (CustomUserSerializer, FavoriteSerializer,
-                          IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, ShoppingCardSerializer,
-                          SubscriptionSerializer, TagSerializer)
+from foodgram.api.filters import IngredientFilter, RecipeFilter
+from foodgram.api.permissions import IsAuthorOrReadOnly
+from foodgram.api.serializers import (CustomUserSerializer, FavoriteSerializer,
+                                      IngredientSerializer,
+                                      RecipeReadSerializer,
+                                      RecipeWriteSerializer,
+                                      ShoppingCardSerializer,
+                                      SubscriptionSerializer, TagSerializer)
+from foodgram.core.utils import ListRetrieveModelMixin, get_product_list
+from foodgram.recipes.models import (Favorite, Follow, Ingredient, Recipe,
+                                     ShoppingCard, Tag)
+from foodgram.users.models import User
 
 
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     http_method_names = ['get', 'post', 'delete']
-
-    # пока оставлю это тут def get_queryset(self): if
-    # self.request.user.is_authenticated: return User.objects.annotate(
-    # is_subscribed=Exists( Follow.objects.filter(user=self.request.user,
-    # author=OuterRef('id')))) return User.objects.annotate(
-    # is_subscribed=Value(False, output_field=BooleanField()))
 
     @action(
         detail=False,
