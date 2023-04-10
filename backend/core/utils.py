@@ -2,8 +2,9 @@ import base64
 
 from django.core.files.base import ContentFile
 from django.db.models import Sum
-from recipes.models import RecipeIngredient
 from rest_framework import mixins, serializers, viewsets
+
+from recipes.models import RecipeIngredient
 
 
 class ListRetrieveModelMixin(mixins.ListModelMixin, mixins.RetrieveModelMixin,
