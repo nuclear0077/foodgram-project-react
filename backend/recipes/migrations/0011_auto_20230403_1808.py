@@ -16,7 +16,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Favorite',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
             ],
             options={
                 'verbose_name': 'Пользователь и избранный рецепт',
@@ -43,12 +44,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ingredient',
             name='name',
-            field=models.CharField(max_length=200, verbose_name='Имя ингредиента'),
+            field=models.CharField(
+                max_length=200, verbose_name='Имя ингредиента'),
         ),
         migrations.AlterField(
             model_name='recipe',
             name='pub_date',
-            field=models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Дата публикации'),
+            field=models.DateTimeField(
+                auto_now_add=True, db_index=True, verbose_name='Дата публикации'),
         ),
         migrations.AlterField(
             model_name='recipeingredient',
@@ -70,7 +73,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='shoppingcard',
-            constraint=models.UniqueConstraint(fields=('user', 'recipe'), name='unique_user_recipe'),
+            constraint=models.UniqueConstraint(
+                fields=('user', 'recipe'), name='unique_user_recipe'),
         ),
         migrations.DeleteModel(
             name='FavoriteRecipe',
@@ -89,6 +93,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='favorite',
-            constraint=models.UniqueConstraint(fields=('user', 'recipe'), name='unique_user_favorite_recipe'),
+            constraint=models.UniqueConstraint(
+                fields=('user', 'recipe'), name='unique_user_favorite_recipe'),
         ),
     ]

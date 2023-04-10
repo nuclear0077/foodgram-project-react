@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
             name='color',
             field=models.CharField(max_length=7, validators=[
                 django.core.validators.RegexValidator(regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')],
-                                   verbose_name='HEX-код цвета'),
+                verbose_name='HEX-код цвета'),
         ),
     ]

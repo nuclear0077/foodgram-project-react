@@ -1,4 +1,3 @@
-from core.utils import ListRetrieveModelMixin, get_product_list
 from django.conf import settings
 from django.db.models import Value
 from django.db.models.fields import BooleanField
@@ -6,14 +5,15 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
-                            Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from users.models import User
 
+from core.utils import ListRetrieveModelMixin, get_product_list
+from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
+                            Tag)
+from users.models import User
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (CustomUserSerializer, FavoriteSerializer,
@@ -50,7 +50,10 @@ class CustomUserViewSet(UserViewSet):
     )
     def subscriptions(self, request):
         user = request.user
-        subscriptions = Follow.objects.filter(user=user)
+        subscriptions = User.objects.filter(
+            following__user=user
+        ).all()
+
         pages = self.paginate_queryset(subscriptions)
         serializer = SubscriptionSerializer(
             pages,
@@ -127,7 +130,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticated]
     )
     def download_shopping_cart(self, request):
-        product_list = get_product_list(request)
+        product_list = get_product_list(request.user)
         response = HttpResponse(product_list,
                                 content_type='text/plain')
         response['Content-Disposition'] = (

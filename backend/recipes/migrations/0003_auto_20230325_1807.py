@@ -11,10 +11,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='recipeingredient',
-            constraint=models.UniqueConstraint(fields=('ingredient', 'recipe'), name='unique_ingredient_recipe'),
+            constraint=models.UniqueConstraint(
+                fields=('ingredient', 'recipe'), name='unique_ingredient_recipe'),
         ),
         migrations.AddConstraint(
             model_name='tagrecipe',
-            constraint=models.UniqueConstraint(fields=('tag', 'recipe'), name='unique_tag_recipe'),
+            constraint=models.UniqueConstraint(
+                fields=('tag', 'recipe'), name='unique_tag_recipe'),
         ),
     ]

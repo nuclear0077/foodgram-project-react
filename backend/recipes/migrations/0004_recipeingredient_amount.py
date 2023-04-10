@@ -12,7 +12,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recipeingredient',
             name='amount',
-            field=models.PositiveSmallIntegerField(default=1, verbose_name='Количество'),
+            field=models.PositiveSmallIntegerField(
+                default=1, verbose_name='Количество'),
             preserve_default=False,
         ),
     ]

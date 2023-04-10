@@ -12,7 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='recipe',
-            options={'ordering': ('-pub_date',), 'verbose_name': 'Рецепт', 'verbose_name_plural': 'Рецепты'},
+            options={'ordering': (
+                '-pub_date',), 'verbose_name': 'Рецепт', 'verbose_name_plural': 'Рецепты'},
         ),
         migrations.AddField(
             model_name='recipe',
@@ -23,6 +24,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='recipe',
-            constraint=models.UniqueConstraint(fields=('name', 'author'), name='unique_name_author_recip'),
+            constraint=models.UniqueConstraint(
+                fields=('name', 'author'), name='unique_name_author_recip'),
         ),
     ]

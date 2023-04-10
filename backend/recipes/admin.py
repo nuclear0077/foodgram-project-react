@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from recipes.models import (Favorite, Follow, Ingredient, Recipe,
                             RecipeIngredient, ShoppingCard, Tag, TagRecipe)
 
@@ -10,10 +11,6 @@ class RecipeIngredientLine(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    def added_to_favorites_amount(self, obj):
-        return Favorite.objects.filter(recipe=obj).count()
-
-    added_to_favorites_amount.short_description = 'Добавлений в избранное'
     inlines = [RecipeIngredientLine]
     list_display = (
         'pk',
@@ -26,6 +23,11 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     list_filter = ('name', 'author', 'tags', 'pub_date', 'cooking_time')
     readonly_fields = ('added_to_favorites_amount',)
+
+    def added_to_favorites_amount(self, obj):
+        return Favorite.objects.filter(recipe=obj).count()
+
+    added_to_favorites_amount.short_description = 'Добавлений в избранное'
 
 
 admin.site.register(Tag)

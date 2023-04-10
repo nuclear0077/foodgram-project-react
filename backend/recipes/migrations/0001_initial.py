@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Follow',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
             ],
             options={
                 'verbose_name': 'Подписка',
@@ -24,9 +25,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ingredient',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True, verbose_name='Имя ингредиента')),
-                ('measurement_unit', models.CharField(max_length=200, verbose_name='Единица измерения')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=200,
+                 unique=True, verbose_name='Имя ингредиента')),
+                ('measurement_unit', models.CharField(
+                    max_length=200, verbose_name='Единица измерения')),
             ],
             options={
                 'verbose_name': 'Ингредиент',
@@ -36,11 +40,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Recipe',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Название рецепта')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=200,
+                 verbose_name='Название рецепта')),
                 ('text', models.TextField(verbose_name='Описание')),
-                ('cooking_time', models.PositiveSmallIntegerField(verbose_name='Время приготовления, мин')),
-                ('image', models.ImageField(upload_to='recipes/', verbose_name='Картинка')),
+                ('cooking_time', models.PositiveSmallIntegerField(
+                    verbose_name='Время приготовления, мин')),
+                ('image', models.ImageField(
+                    upload_to='recipes/', verbose_name='Картинка')),
             ],
             options={
                 'verbose_name': 'Рецепт',
@@ -50,7 +58,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RecipeIngredient',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
             ],
             options={
                 'verbose_name': 'Ингредиент и рецепт',
@@ -60,7 +69,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ShoppingCard',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
             ],
             options={
                 'verbose_name': 'Пользователь и рецепт',
@@ -70,10 +80,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tag',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True, verbose_name='Имя тега')),
-                ('color', models.CharField(max_length=200, verbose_name='HEX-код цвета')),
-                ('slug', models.SlugField(max_length=200, unique=True, verbose_name='Slug')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=200,
+                 unique=True, verbose_name='Имя тега')),
+                ('color', models.CharField(
+                    max_length=200, verbose_name='HEX-код цвета')),
+                ('slug', models.SlugField(max_length=200,
+                 unique=True, verbose_name='Slug')),
             ],
             options={
                 'verbose_name': 'Тег',
@@ -83,9 +97,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TagRecipe',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recipe', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='recipes.recipe')),
-                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='recipes.tag')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('recipe', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='recipes.recipe')),
+                ('tag', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='recipes.tag')),
             ],
             options={
                 'verbose_name': 'Тег и рецепт',
@@ -94,7 +111,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='tag',
-            constraint=models.UniqueConstraint(fields=('name', 'color'), name='unique_name_color'),
+            constraint=models.UniqueConstraint(
+                fields=('name', 'color'), name='unique_name_color'),
         ),
         migrations.AddField(
             model_name='shoppingcard',

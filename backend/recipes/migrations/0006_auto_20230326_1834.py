@@ -31,7 +31,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FavoriteRecipe',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('recip', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favorite',
                                             to='recipes.recipe')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favorite',
@@ -44,6 +45,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='favoriterecipe',
-            constraint=models.UniqueConstraint(fields=('user', 'recip'), name='unique_user_favorite_recip'),
+            constraint=models.UniqueConstraint(
+                fields=('user', 'recip'), name='unique_user_favorite_recip'),
         ),
     ]

@@ -126,7 +126,8 @@ class Recipe(models.Model):
         upload_to='recipes/',
         verbose_name='Картинка'
     )
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='recipes')
     ingredients = models.ManyToManyField(Ingredient,
                                          through='RecipeIngredient')
     tags = models.ManyToManyField(Tag, through='TagRecipe')

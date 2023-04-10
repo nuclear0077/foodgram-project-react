@@ -23,32 +23,38 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recipeingredient',
             name='ingredient',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='recipes.ingredient'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='recipes.ingredient'),
         ),
         migrations.AddField(
             model_name='recipeingredient',
             name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='recipes.recipe'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='recipes.recipe'),
         ),
         migrations.AddField(
             model_name='recipe',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='recipe',
             name='favorited_by',
-            field=models.ManyToManyField(blank=True, related_name='favorite_recipes', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                blank=True, related_name='favorite_recipes', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='recipe',
             name='ingredients',
-            field=models.ManyToManyField(through='recipes.RecipeIngredient', to='recipes.Ingredient'),
+            field=models.ManyToManyField(
+                through='recipes.RecipeIngredient', to='recipes.Ingredient'),
         ),
         migrations.AddField(
             model_name='recipe',
             name='tags',
-            field=models.ManyToManyField(through='recipes.TagRecipe', to='recipes.Tag'),
+            field=models.ManyToManyField(
+                through='recipes.TagRecipe', to='recipes.Tag'),
         ),
         migrations.AddConstraint(
             model_name='ingredient',
@@ -69,10 +75,12 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='shoppingcard',
-            constraint=models.UniqueConstraint(fields=('user', 'recip'), name='unique_user_recip'),
+            constraint=models.UniqueConstraint(
+                fields=('user', 'recip'), name='unique_user_recip'),
         ),
         migrations.AddConstraint(
             model_name='follow',
-            constraint=models.UniqueConstraint(fields=('user', 'author'), name='unique_user_author'),
+            constraint=models.UniqueConstraint(
+                fields=('user', 'author'), name='unique_user_author'),
         ),
     ]
