@@ -14,6 +14,7 @@ from core.utils import ListRetrieveModelMixin, get_product_list
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
                             Tag)
 from users.models import User
+
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (CustomUserSerializer, FavoriteSerializer,

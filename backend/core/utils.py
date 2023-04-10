@@ -23,7 +23,8 @@ class Base64ImageField(serializers.ImageField):
 
 def get_product_list(user):
     product_lst = RecipeIngredient.objects.filter(
-        recipe__shopping_card__user=user).select_related('shopping_card', 'user').values_list(
+        recipe__shopping_card__user=user).select_related('shopping_card',
+                                                         'user').values_list(
         'ingredient__name', 'ingredient__measurement_unit').annotate(
         total_amount=Sum('amount'))
     product_list = [f'{name} {amount} {unit}\n'
