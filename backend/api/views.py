@@ -1,3 +1,4 @@
+from core.utils import ListRetrieveModelMixin, get_product_list
 from django.conf import settings
 from django.db.models import Value
 from django.db.models.fields import BooleanField
@@ -9,10 +10,6 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-from core.utils import ListRetrieveModelMixin, get_product_list
-from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
-                            Tag)
 from users.models import User
 
 from .filters import IngredientFilter, RecipeFilter
@@ -27,12 +24,6 @@ class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     http_method_names = ['get', 'post', 'delete']
-
-    # пока оставлю это тут def get_queryset(self): if
-    # self.request.user.is_authenticated: return User.objects.annotate(
-    # is_subscribed=Exists( Follow.objects.filter(user=self.request.user,
-    # author=OuterRef('id')))) return User.objects.annotate(
-    # is_subscribed=Value(False, output_field=BooleanField()))
 
     @action(
         detail=False,
