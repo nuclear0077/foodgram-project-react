@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
+                            Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -24,6 +26,12 @@ class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     http_method_names = ['get', 'post', 'delete']
+
+    # пока оставлю это тут def get_queryset(self): if
+    # self.request.user.is_authenticated: return User.objects.annotate(
+    # is_subscribed=Exists( Follow.objects.filter(user=self.request.user,
+    # author=OuterRef('id')))) return User.objects.annotate(
+    # is_subscribed=Value(False, output_field=BooleanField()))
 
     @action(
         detail=False,
