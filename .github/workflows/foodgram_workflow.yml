@@ -56,7 +56,7 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
-              sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} stop
+              sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} down -v
               sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} rm -f backend
               touch .env
               echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -66,6 +66,7 @@ jobs:
               echo DB_HOST=${{ secrets.DB_HOST }} >> .env
               echo DB_PORT=${{ secrets.DB_PORT }} >> .env
               sudo docker pull ${{secrets.BACKEND_DOCKER_HUB_TAG}}
+              sudo docker pull ${{secrets.FRONTEND_DOCKER_HUB_TAG}}
               sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} up -d --build
 
   send_message:
