@@ -13,14 +13,12 @@ from rest_framework.response import Response
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsAuthorOrReadOnly
 from api.serializers import (CustomUserSerializer, FavoriteSerializer,
-                                      IngredientSerializer,
-                                      RecipeReadSerializer,
-                                      RecipeWriteSerializer,
-                                      ShoppingCardSerializer,
-                                      SubscriptionSerializer, TagSerializer)
+                             IngredientSerializer, RecipeReadSerializer,
+                             RecipeWriteSerializer, ShoppingCardSerializer,
+                             SubscriptionSerializer, TagSerializer)
 from core.utils import ListRetrieveModelMixin, get_product_list
-from recipes.models import (Favorite, Follow, Ingredient, Recipe,
-                                     ShoppingCard, Tag)
+from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCard,
+                            Tag)
 from users.models import User
 
 
