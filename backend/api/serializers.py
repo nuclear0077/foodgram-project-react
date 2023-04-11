@@ -3,8 +3,8 @@ from django.db import transaction
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
-from foodgram.core.utils import Base64ImageField
-from foodgram.recipes.models import (Favorite, Follow, Ingredient, Recipe,
+from core.utils import Base64ImageField
+from recipes.models import (Favorite, Follow, Ingredient, Recipe,
                                      RecipeIngredient, ShoppingCard, Tag)
 
 User = get_user_model()

@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from foodgram.api.views import (CustomUserViewSet,
+from api.views import (CustomUserViewSet,
                                 IngredientListRetrieveViewSet, RecipeViewSet,
                                 TagListRetrieveViewSet)
 

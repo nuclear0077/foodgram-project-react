@@ -10,18 +10,18 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from foodgram.api.filters import IngredientFilter, RecipeFilter
-from foodgram.api.permissions import IsAuthorOrReadOnly
-from foodgram.api.serializers import (CustomUserSerializer, FavoriteSerializer,
+from api.filters import IngredientFilter, RecipeFilter
+from api.permissions import IsAuthorOrReadOnly
+from api.serializers import (CustomUserSerializer, FavoriteSerializer,
                                       IngredientSerializer,
                                       RecipeReadSerializer,
                                       RecipeWriteSerializer,
                                       ShoppingCardSerializer,
                                       SubscriptionSerializer, TagSerializer)
-from foodgram.core.utils import ListRetrieveModelMixin, get_product_list
-from foodgram.recipes.models import (Favorite, Follow, Ingredient, Recipe,
+from core.utils import ListRetrieveModelMixin, get_product_list
+from recipes.models import (Favorite, Follow, Ingredient, Recipe,
                                      ShoppingCard, Tag)
-from foodgram.users.models import User
+from users.models import User
 
 
 class CustomUserViewSet(UserViewSet):
