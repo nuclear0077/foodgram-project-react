@@ -56,7 +56,7 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
-              sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} down -v
+              sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} stop
               sudo docker-compose -f ${{ secrets.PATH_DOCKER_COMPOSE_YML }} rm -f backend
               touch .env
               echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
