@@ -143,6 +143,9 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         ingredients = attrs.get('ingredients', [])
         ingredients_id = []
+        if Recipe.objects.filter(name=attrs.get('name')).exists():
+            raise serializers.ValidationError(
+                {'name': 'Название рецепта должно быть уникальным'}, code=400)
         if not attrs.get('cooking_time') > 0:
             raise serializers.ValidationError(
                 {"cooking_time": "cooking_time должно быть больше 0"})
