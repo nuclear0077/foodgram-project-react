@@ -98,7 +98,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         return all_recipes.count()
 
 
-
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
