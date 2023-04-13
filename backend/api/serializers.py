@@ -53,32 +53,50 @@ class SubscriptionRecipeSerializerRead(serializers.ModelSerializer):
         fields = ('id', 'name', 'image', 'cooking_time',)
 
 
-class SubscriptionSerializer(CustomUserSerializer):
+class SubscriptionSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='author.id')
+    first_name = serializers.ReadOnlyField(source='author.first_name')
+    last_name = serializers.ReadOnlyField(source='author.last_name')
+    username = serializers.ReadOnlyField(source='author.username')
+    email = serializers.ReadOnlyField(source='author.email')
+    is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
 
     class Meta:
-        model = User
-        fields = CustomUserSerializer.Meta.fields + (
+        model = Follow
+        fields = (
+            'id', 'first_name', 'last_name', 'username', 'email',
+            'is_subscribed',
             'recipes', 'recipes_count')
 
+    def get_is_subscribed(self, obj):
+        return Follow.objects.filter(
+            user=self.context.get('request').user,
+            author=obj.author
+        ).exists()
+
     def validate(self, attrs):
-        user = self.context['request'].user
-        author = self.instance
+        user = self.context.get('request').user
+        author = self.context.get('author')
         if author == user:
             raise serializers.ValidationError(
                 {'error': 'Нельзя подписываться на самого себя'}, code=400)
         if Follow.objects.filter(user=user, author=author).exists():
             raise serializers.ValidationError(
-                {'error': 'Вы уже подписаны на данного автора'}, code=400)
+                {'error': 'Вы уже подписаны на данного автоора'}, code=400)
         return attrs
 
-    def get_recipes(self, obj):
-        return SubscriptionRecipeSerializerRead(
-            obj.recipes.all(), many=True).data
+    def get_recipes(self, attrs):
+        author = attrs.author
+        all_recipes = Recipe.objects.filter(author=author)
+        return SubscriptionRecipeSerializerRead(all_recipes, many=True).data
 
-    def get_recipes_count(self, obj):
-        return obj.recipes.count()
+    def get_recipes_count(self, attrs):
+        author = attrs.author
+        all_recipes = Recipe.objects.filter(author=author)
+        return all_recipes.count()
+
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
