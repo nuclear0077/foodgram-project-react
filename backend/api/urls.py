@@ -12,7 +12,6 @@ router_v1.register('ingredients', IngredientListRetrieveViewSet,
 router_v1.register('recipes', RecipeViewSet, basename='recipes')
 
 urlpatterns = [
-    # path('', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('', include(router_v1.urls), name='users-v1'),
 ]

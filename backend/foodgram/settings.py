@@ -174,3 +174,4 @@ DJOSER = {
     }
 }
 FILENAME_SHOPPING_CART = 'shopping_cart.txt'
+STOP_WORD = ['me']
